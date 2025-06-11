@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KBO ELO System - 임시 페이지</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 600px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        .status {
+            background: rgba(46, 213, 115, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border: 1px solid rgba(46, 213, 115, 0.5);
+        }
+        .api-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        .api-link {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .api-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚾ KBO ELO System</h1>
+        <p>시스템이 성공적으로 배포되었습니다!</p>
+        
+        <div class="status">
+            <div class="loading"></div>
+            <strong>상태: 정상 운영 중</strong>
+        </div>
+
+        <div class="api-links">
+            <a href="/api/docs" class="api-link" target="_blank">
+                📊 Main API 문서
+            </a>
+            <a href="/live-api/docs" class="api-link" target="_blank">
+                🔴 Live API 문서
+            </a>
+            <a href="/api/system/db-status" class="api-link" target="_blank">
+                🗄️ 데이터베이스 상태
+            </a>
+            <a href="/live-api/health" class="api-link" target="_blank">
+                💚 라이브 시스템 상태
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>
+                🚀 Debian 12 (GCP e2-medium) 호환 버전<br>
+                🐳 AMD64 아키텍처 지원<br>
+                📅 배포일: <span id="deploy-date"></span>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 현재 날짜 표시
+        document.getElementById('deploy-date').textContent = new Date().toLocaleDateString('ko-KR');
+        
+        // API 상태 확인 (간단한 헬스체크)
+        async function checkApiStatus() {
+            try {
+                const response = await fetch('/api/system/db-status');
+                if (response.ok) {
+                    document.querySelector('.status').innerHTML = 
+                        '<strong>✅ 상태: 모든 시스템 정상</strong>';
+                }
+            } catch (error) {
+                console.log('API 상태 확인 중...', error);
+            }
+        }
+        
+        // 페이지 로드 후 API 상태 확인
+        setTimeout(checkApiStatus, 2000);
+    </script>
+</body>
+</html>
